@@ -1,4 +1,5 @@
 import { observe } from './index'
+import { arrayMethods, observerArray } from './array';
 
 export function defineReactive(data,key,value){
     
@@ -7,9 +8,11 @@ export function defineReactive(data,key,value){
 
     Object.defineProperty(data,key,{
         get(){
+            console.log('获取数据')
             return value;
         },
         set(newValue){
+            console.log('赋值数据')
             if(newValue === value) return;
             value = newValue;
         }
@@ -17,7 +20,15 @@ export function defineReactive(data,key,value){
 }
 class Observer { 
     constructor(data){
-        this.walk(data);
+        if(Array.isArray(data)){
+
+            data.__proto__ = arrayMethods
+           
+            observerArray(data)
+            
+        }else {
+            this.walk(data)
+        }
     }
     walk(data){
         let keys = Object.keys(data);
