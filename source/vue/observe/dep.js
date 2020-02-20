@@ -10,6 +10,11 @@ class Dep{
     notify(){
         this.subs.forEach(watcher=>watcher.update());
     }
+    depend(){
+        if(Dep.target){
+            Dep.target.addDep(this)
+        }
+    }
 }
 let stack = [];
 export function pushTarget(watcher){

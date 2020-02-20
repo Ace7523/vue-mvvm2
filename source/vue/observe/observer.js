@@ -11,7 +11,11 @@ export function defineReactive(data,key,value){
         get(){
             console.log('获取数据')
             if (Dep.target) {
-                dep.addSub(Dep.target)
+                // 直接这么写是有问题的 因为页面中，第一次渲染时候模板要是如下
+                // {{name}} {{name}} 的情况， name拥有的dep中，就会添加了重复的watcher
+                // dep.addSub(Dep.target)
+                // 所以要修改
+                dep.depend()
             }
             return value;
         },
