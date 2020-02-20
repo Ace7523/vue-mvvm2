@@ -1,21 +1,26 @@
 import { observe } from './index'
-import { arrayMethods, observerArray } from './array';
+import { arrayMethods, observerArray } from './array'
+import Dep from './dep'
 
 export function defineReactive(data,key,value){
     
     // 针对value仍是对象的情况， 就需要对对象再次进行观察，也就是递归操作
     observe(value)
-
+    let dep = new Dep()
     Object.defineProperty(data,key,{
         get(){
             console.log('获取数据')
+            if (Dep.target) {
+                dep.addSub(Dep.target)
+            }
             return value;
         },
         set(newValue){
             console.log('赋值数据')
-            if(newValue === value) return;
+            if(newValue === value) return
             observe(newValue)
-            value = newValue;
+            value = newValue
+            dep.notify()
         }
     })
 }

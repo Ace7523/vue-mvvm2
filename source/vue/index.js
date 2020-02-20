@@ -1,5 +1,6 @@
 import { initState } from './observe'
 import { compiler } from './utils'
+import Watcher from './observe/watcher';
 
 function Vue (options) {
     this._init(options)
@@ -30,7 +31,7 @@ Vue.prototype.$mount = function () {
         vm._update()
     }
     
-    updateComponent()
+    new Watcher(vm, updateComponent)
 }
 Vue.prototype._update = function () {
    

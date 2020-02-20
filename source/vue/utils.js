@@ -10,6 +10,7 @@ export function proxyObj(vm,source,key){
 }
 
 const defaultRE = /\{\{((?:.|\r?\n)+?)\}\}/g
+
 export const util = {
     getValue(vm,expr){
         let keys = expr.split('.');

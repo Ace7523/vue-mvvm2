@@ -12,9 +12,8 @@ let vm = new MyVue({
     }
 })
 
-console.log(vm)
 setTimeout( () => {
-    vm.arr.push(4)
+    vm.name = 'newname'
 }, 2000)
 
 
