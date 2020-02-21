@@ -7,21 +7,19 @@ let vm = new MyVue({
             name: 'Ace7523',
             age: {'age' : '18'},
             testObj: {'obj' : {'c': 'c'} },
-            arr: [1,2,3]
+            arr: [{a: '1'},2,3]
         }
     }
 })
 
+console.log('vm', vm)
 setTimeout( () => {
-    vm.name = 'newname1'
-    vm.name = 'newname2'
-    vm.name = 'newname3'
-    vm.name = 'newname4'
-    vm.name = 'newname5'
-    vm.age.age = 99
-}, 5000)
+    vm.arr.push(4)
+    vm.arr[2] = 100 // 这样改不行 这个后面再看为什么吧
+}, 2000)
 
-
+// ***********vue 批量更新******************
+// 
 // 如果不加以修改，这样的重复赋值，会不断的触发set中的notify
 // 导致重复渲染
 
@@ -32,3 +30,20 @@ setTimeout( () => {
 
 // 所以要批量更新 即 异步更新，每次的重新赋值 肯定是同步执行，等所有的赋值同步代码执行完后，
 // 然后让watcher执行update，这里也是去重之后的watcher
+
+// ***********数组更新************************
+//  问 数组怎么收集依赖？
+// 看这个构造函数  data.arr 是数组的话，就没有走进walk方法中，所以就没有对arr 进行 defineReactive
+// constructor(data){
+//     if(Array.isArray(data)){
+
+//         data.__proto__ = arrayMethods
+       
+//         observerArray(data)
+        
+//     }else {
+//         this.walk(data)
+//     }
+// }
+
+// 数组就目前来讲是没有dep的 ， 所以要想办法加上dep

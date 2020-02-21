@@ -5,7 +5,7 @@ import Dep from './dep'
 export function defineReactive(data,key,value){
     
     // 针对value仍是对象的情况， 就需要对对象再次进行观察，也就是递归操作
-    observe(value)
+    let childOb = observe(value)
     let dep = new Dep()
     Object.defineProperty(data,key,{
         get(){
@@ -16,10 +16,14 @@ export function defineReactive(data,key,value){
                 // dep.addSub(Dep.target)
                 // 所以要修改
                 dep.depend()
+                if(childOb){
+                    childOb.dep.depend()
+               }
             }
             return value;
         },
         set(newValue){
+            console.log(newValue)
             console.log('赋值数据')
             if(newValue === value) return
             observe(newValue)
@@ -30,6 +34,13 @@ export function defineReactive(data,key,value){
 }
 class Observer { 
     constructor(data){
+        // 在observer实例上 挂载一个dep
+        this.dep = new Dep()
+
+        Object.defineProperty(data,'__ob__',{ 
+            get:()=>this
+        })
+
         if(Array.isArray(data)){
 
             data.__proto__ = arrayMethods

@@ -27,10 +27,7 @@ methods.forEach(method=>{
                 break;
         }
         if(inserted) observerArray(inserted);
-        
-        if(inserted) {
-            console.log('改变原数组的方法执行了，要进行页面的更新操作')
-        }
+        this.__ob__.dep.notify()
         return r;
     }
 })
