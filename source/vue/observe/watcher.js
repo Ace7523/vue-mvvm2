@@ -1,10 +1,11 @@
-let id = 0;
+let id = 0
 import {pushTarget,popTarget} from './dep'
 import {util} from '../utils'
+import {nextTick} from './nextTick'
 class Watcher{ 
     constructor(vm, exprOrFn, cb=()=>{}, opts={}){
-        this.vm = vm;
-        this.exprOrFn = exprOrFn;
+        this.vm = vm
+        this.exprOrFn = exprOrFn
         if(typeof exprOrFn === 'function'){
             this.getter = exprOrFn
         }else {
@@ -12,10 +13,10 @@ class Watcher{
                 return util.getValue(vm,exprOrFn)
             }
         }
-        this.cb = cb;
-        this.opts = opts;
-        this.id = id++;
-        this.deps = [];
+        this.cb = cb
+        this.opts = opts
+        this.id = id++
+        this.deps = []
         this.depsId = new Set()
        
         this.get()
@@ -26,10 +27,10 @@ class Watcher{
         let value = this.getter.call(this.vm)
         
         popTarget()
-        return value;
+        return value
     }
     update() {
-        this.get()
+        queueWatcher(this)
     }
     addDep(dep){
         let id = dep.id
@@ -39,6 +40,23 @@ class Watcher{
             dep.addSub(this)
         }
     }
+    run(){
+        this.get()
+    }
 }
-
-export default Watcher;
+let has = {}
+let queue = []
+function flushQueue(){
+    queue.forEach(watcher=>watcher.run())
+    has = {}
+    queue = []
+}
+function queueWatcher(watcher){
+    let id = watcher.id
+    if(has[id] == null){
+        has[id] = true
+        queue.push(watcher)
+        nextTick(flushQueue)
+    }
+}
+export default Watcher

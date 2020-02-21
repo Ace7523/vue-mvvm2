@@ -34,7 +34,7 @@ Vue.prototype.$mount = function () {
     new Watcher(vm, updateComponent)
 }
 Vue.prototype._update = function () {
-   
+    console.log('重新渲染操作')
     let vm = this
     let el = vm.$el
 
