@@ -1,5 +1,5 @@
 import { observe } from './index'
-import { arrayMethods, observerArray } from './array'
+import { arrayMethods, observerArray, dependArray } from './array'
 import Dep from './dep'
 
 export function defineReactive(data,key,value){
@@ -18,6 +18,9 @@ export function defineReactive(data,key,value){
                 dep.depend()
                 if(childOb){
                     childOb.dep.depend()
+                    if(Array.isArray(value)){
+                        dependArray(value)
+                    }
                }
             }
             return value;
