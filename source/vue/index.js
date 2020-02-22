@@ -33,6 +33,11 @@ Vue.prototype.$mount = function () {
     
     new Watcher(vm, updateComponent)
 }
+Vue.prototype.$watch = function (expr,handler,opts) {
+    // 原理 创建一个watcher
+    let vm = this;
+    new Watcher(vm,expr,handler,{user:true,...opts}); // 用户自己定义的watch
+}
 Vue.prototype._update = function () {
     console.log('重新渲染操作')
     let vm = this

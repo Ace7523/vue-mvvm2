@@ -26,7 +26,6 @@ export function defineReactive(data,key,value){
             return value;
         },
         set(newValue){
-            console.log(newValue)
             console.log('赋值数据')
             if(newValue === value) return
             observe(newValue)

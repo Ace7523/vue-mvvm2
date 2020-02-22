@@ -39,3 +39,18 @@ function initData(vm){ // 将用户插入的数据 通过object.defineProperty�
 
     observe(data); // 观察数据
 }
+
+function createWatcher(vm,key,handler,opts){
+    return vm.$watch(key,handler,opts);
+}
+function initWatch(vm){
+    let watch = vm.$options.watch
+    for(let key in watch){ 
+        let userDef = watch[key];
+        let handler = userDef;
+        if(userDef.handler){
+            handler = userDef.handler;
+        }
+        createWatcher(vm,key,handler,{immediate:userDef.immediate});
+    }
+}

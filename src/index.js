@@ -9,20 +9,19 @@ let vm = new MyVue({
             testObj: {'obj' : {'c': 'c'} },
             arr: [{a: '1'},[1],3]
         }
+    },
+    watch: {
+        name(newVal, oldVal) {
+            console.log(newVal, oldVal)
+        }
     }
 })
 
 console.log('vm', vm)
 
 setTimeout( () => {
-    vm.arr.push(4)
-}, 3000)
-setTimeout( () => {
-    vm.arr[2] = 100
-}, 4000)
-setTimeout( () => {
-    vm.arr[1].push(2)
-}, 5000)
+    vm.name = '帅帅'
+}, 2000)
 
 // ***********vue 批量更新******************
 // 

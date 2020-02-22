@@ -13,13 +13,16 @@ class Watcher{
                 return util.getValue(vm,exprOrFn)
             }
         }
+        if(opts.user){
+            this.user = true
+        }
         this.cb = cb
         this.opts = opts
         this.id = id++
         this.deps = []
         this.depsId = new Set()
-       
-        this.get()
+        // watch 中需要（newVal， oldVal）所以在创建的时候就把老值保存起来  
+        this.value = this.get()
     }
     get(){
         pushTarget(this)
@@ -41,7 +44,10 @@ class Watcher{
         }
     }
     run(){
-        this.get()
+        let value = this.get()
+        if(this.value !== value) {
+            this.cb(value, this.value)
+        }
     }
 }
 let has = {}
